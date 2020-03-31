@@ -26,7 +26,7 @@ module round_cube(size=[1,1,1], r=0.3, center=false) {
 					let ( m = [size[0]/2 - r, size[1]/2 - r, size[2]/2 - r] ) {
 					for(i = [-1:2:1])
 							 for(j = [-1:2:1])
-                    for(k = [-1:2:1])
+										for(k = [-1:2:1])
 												 translate([i*m[0], j*m[1], k*m[2]])
 															sphere(r=r, $fn=$fn);
 		 }
