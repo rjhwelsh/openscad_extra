@@ -23,6 +23,8 @@ module fillet_trapezoid(size=[1,1,1], r=0.3, angle=45, center=false) {
 		 // r = fillet radius
 		 // angle = angle between base and sides
 		 // center = true/false; whether to position in center (or not)
+		 let( r_max = max(size[0], size[1])/2)
+					assert(r <= r_max, str("Radius does not fit within size! r_max=", r_max));
 		 let ( m = [size[0]/2 - r, size[1]/2 - r, 0],
 					 dx_max = m[0],
 					 dh_max = dx_max*tan(angle),
