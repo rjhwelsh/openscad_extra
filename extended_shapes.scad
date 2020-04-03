@@ -5,6 +5,8 @@ module fillet_cube(size=[1,1,1], r=0.3, center=false) {
 		 // rounds cornes in xy dimension only
 		 // size = outer dimensions of cube
 		 // r = fillet radius
+		 let( r_max = max(size[0], size[1])/2)
+					assert(r <= r_max, str("Radius does not fit within size! r_max=", r_max));
 		 recenter=(center ? 0 : 0.5);
 		 translate(recenter*[size[0],size[1],0])
 					hull()
@@ -46,6 +48,8 @@ module round_cube(size=[1,1,1], r=0.3, center=false) {
 		 // rounds all corners in xyz
 		 // size = outer dimensions of cube
 		 // r = fillet radius
+		 let( r_max = max(size[0], size[1], size[2])/2)
+					assert(r <= r_max, str("Radius does not fit within size! r_max=", r_max));
 		 recenter=(center ? 0 : 0.5);
 		 translate(recenter*size)
 					hull()
