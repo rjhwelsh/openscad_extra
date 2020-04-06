@@ -63,3 +63,53 @@ module round_cube(size=[1,1,1], r=0.3, center=false) {
 															sphere(r=r, $fn=$fn);
 		 }
 }
+
+module rotate_extrude_hull(
+		 angle=360,
+		 convexity=2,
+		 create_hull=true // Use hull unless working with concave shapes
+		 ) {
+		 module section_nohull(angle) {
+					rotate_extrude(angle=$fa)
+							 projection(cut=true)
+							 translate([0,0,1]*(-angle+$fa/2))
+							 children();
+		 }
+
+		 module section_hull(angle, $fs=0.01) {
+					module cut(fa=0, fs=$fs) {
+							 let (
+										trans = (angle+fa+$fa/2),
+										trans2 = (trans >= 360 ? 360 : trans))
+										rotate(a=fa-$fa, v=[0,-1,0])
+										linear_extrude(height=fs/2)
+										projection(cut=true)
+										translate(-trans2*[0,0,1])
+										children();
+					}
+
+					rotate(a=90, v=[1,0,0])
+							 hull() {
+							 cut(fa=0) children();
+							 cut(fa=$fa) children();
+					}
+		 }
+
+		 module main(total_angle=angle, create_hull=create_hull) {
+					if (create_hull) {
+							 for (i=[$fa:$fa:total_angle])
+										let (angle=i)
+												 rotate(a=total_angle-angle, v=[0,0,1])
+												 section_hull(angle=angle)
+												 children();
+					}
+					else {
+							 for (i=[$fa:$fa:total_angle])
+										let (angle=i)
+												 rotate(a=total_angle-angle, v=[0,0,1])
+												 section_nohull(angle=angle)
+												 children();
+					}
+		 }
+		 main() children();
+}
