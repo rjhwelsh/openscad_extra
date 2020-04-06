@@ -98,8 +98,8 @@ module rotate_extrude_hull(
 
 		 module main(total_angle=angle, create_hull=create_hull) {
 					let(
-							 $fn = max(round(total_angle / $fa), $fn),
-							 $fa = total_angle / $fn
+							 n = round(total_angle / $fa),
+							 $fa = total_angle / n
 							 )
 							 if (create_hull) {
 										for (i=[0:$fa:total_angle-$fa])
