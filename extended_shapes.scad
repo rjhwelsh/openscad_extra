@@ -69,19 +69,20 @@ module rotate_extrude_hull(
 		 convexity=2,
 		 create_hull=true // Use hull unless working with concave shapes
 		 ) {
+		 total_angle=angle;
 		 module section_nohull(angle) {
 					rotate_extrude(angle=$fa)
 							 projection(cut=true)
-							 translate([0,0,1]*(-angle+$fa/2))
+							 translate([0,0,1]*(-angle))
 							 children();
 		 }
 
 		 module section_hull(angle, $fs=0.01) {
 					module cut(fa=0, fs=$fs) {
 							 let (
-										trans = (angle+fa+$fa/2),
-										trans2 = (trans >= 360 ? 360 : trans))
-										rotate(a=fa-$fa, v=[0,-1,0])
+										trans = (angle+fa),
+										trans2 = (trans >= total_angle ? total_angle : trans))
+										rotate(a=fa, v=[0,1,0])
 										linear_extrude(height=fs/2)
 										projection(cut=true)
 										translate(-trans2*[0,0,1])
@@ -96,20 +97,24 @@ module rotate_extrude_hull(
 		 }
 
 		 module main(total_angle=angle, create_hull=create_hull) {
-					if (create_hull) {
-							 for (i=[$fa:$fa:total_angle])
-										let (angle=i)
-												 rotate(a=total_angle-angle, v=[0,0,1])
-												 section_hull(angle=angle)
-												 children();
-					}
-					else {
-							 for (i=[$fa:$fa:total_angle])
-										let (angle=i)
-												 rotate(a=total_angle-angle, v=[0,0,1])
-												 section_nohull(angle=angle)
-												 children();
-					}
+					let(
+							 $fn = max(round(total_angle / $fa), $fn),
+							 $fa = total_angle / $fn
+							 )
+							 if (create_hull) {
+										for (i=[0:$fa:total_angle-$fa])
+												 let (angle=i)
+															rotate(a=angle, v=[0,0,1])
+															section_hull(angle=angle)
+															children();
+							 }
+							 else {
+										for (i=[0:$fa:total_angle-$fa])
+												 let (angle=i)
+															rotate(a=angle, v=[0,0,1])
+															section_nohull(angle=angle)
+															children();
+							 }
 		 }
-		 main() children();
+		 union() main() children();
 }
