@@ -1,6 +1,12 @@
 // Openscad extended shapes
 // Copyright (C) 2020  rjhwelsh
 
+// Define standard vector directions
+// i, j, k
+i = [1,0,0];
+j = [0,1,0];
+k = [0,0,1];
+
 module fillet_cube(size=[1,1,1], r=0.3, center=false) {
      // rounds cornes in xy dimension only
      // size = outer dimensions of cube
