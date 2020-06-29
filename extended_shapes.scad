@@ -24,11 +24,18 @@ module fillet_cube(size=[1,1,1], r=0.3, center=false) {
      }
 }
 
-module fillet_trapezoid(size=i+j+k, r=0.3, angle=45, center=false) {
+module fillet_trapezoid(size=i+j+k, r=0.3, angle=45, center=true) {
      // size = [xyz] outer dimensions to fit trapezoid in
      // r = fillet radius
      // angle = angle between base and sides
      // center = true/false; whether to position in center (or not)
+
+     module tri(b, h) {
+	  translate(h*j) children();
+	  translate(b*i) children();
+	  //children();
+     }
+
      let( r_max = min(size[0], size[1])/2)
 	  assert(r <= r_max, str("Radius does not fit within size! r_max=", r_max));
      let (s_r = [size[0]/2 - r, size[1]/2 - r, 0],
@@ -43,23 +50,16 @@ module fillet_trapezoid(size=i+j+k, r=0.3, angle=45, center=false) {
 	  ) {
 	  //echo(str([dx, dx_max],[dh, dh_max]));
 	  assert(dx <= dx_max, assert_message);
-	  recenter=(center ? 0 : 0.5);
-	  translate(recenter*[tr_x,dh+2*r,0])
+	  offset_center=(center ? 0 : 0.5);
+	  translate(offset_center*[tr_x,dh+2*r,0])
 	       hull()
-	  {
-
-	       translate(-j*s_r[1]) {
-		    for(a = [-1:2:1])
-			 translate(i*a*s_r[0]) {
-			      cylinder(h=size[2],r=r,$fn=$fn);
-
-			      translate([-a*dx,
-					 2*s_r[1],
-					 0])
-				   cylinder(h=size[2]/2,r=r,$fn=$fn);
-			 }
-	       }
-	  }
+	       translate(-j*dh/2) // Center in depth
+	       for(a = [0:1]) // Mirror on other side
+		    mirror(i*a)
+			 translate(i*s_r[0]) // Adjust to width (size[0])
+			 translate(-i*dx) // Move edge to center
+			 tri(b=dx,h=dh)
+			 cylinder(h=size[2], r=r);
      }
 }
 
