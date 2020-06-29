@@ -24,31 +24,42 @@ module fillet_cube(size=[1,1,1], r=0.3, center=false) {
      }
 }
 
-module fillet_trapezoid(size=[1,1,1], r=0.3, angle=45, center=false) {
+module fillet_trapezoid(size=i+j+k, r=0.3, angle=45, center=false) {
      // size = [xyz] outer dimensions to fit trapezoid in
      // r = fillet radius
      // angle = angle between base and sides
      // center = true/false; whether to position in center (or not)
      let( r_max = min(size[0], size[1])/2)
 	  assert(r <= r_max, str("Radius does not fit within size! r_max=", r_max));
-     let ( m = [size[0]/2 - r, size[1]/2 - r, 0],
-	   dx_max = m[0],
-	   dh_max = dx_max*tan(angle),
-	   dh = 2*m[1],
-	   dx = dh/tan(angle),
-	   assert_message = str("fillet_trapezoid: Reduce height. Maximum height is ", dh_max + 2*r, "!")
+     let (s_r = [size[0]/2 - r, size[1]/2 - r, 0],
+	  dx_max = s_r[0],
+	  dh_max = dx_max*tan(angle),
+	  dh = 2*s_r[1],
+	  dx = dh/tan(angle),
+	  assert_message = str(
+	       "fillet_trapezoid: Reduce height. Maximum height (size[1]) is ", dh_max + 2*r, "!"),
+	  // tr_x = max(size[0], size[0]-2*dx) // Translation for non-central placement
+	  tr_x = size[0] // Translates according to width of base, (size[0])
 	  ) {
+	  //echo(str([dx, dx_max],[dh, dh_max]));
 	  assert(dx <= dx_max, assert_message);
 	  recenter=(center ? 0 : 0.5);
-
-	  translate(recenter*[size[0],dh+2*r,0])
+	  translate(recenter*[tr_x,dh+2*r,0])
 	       hull()
-	       for(i = [-1:2:1])
-		    for(j = [-1:2:1])
-			 translate([i*(m[0] - (j+1)/2*dx),
-				    j*m[1],
-				    m[2]])
+	  {
+
+	       translate(-j*s_r[1]) {
+		    for(a = [-1:2:1])
+			 translate(i*a*s_r[0]) {
 			      cylinder(h=size[2],r=r,$fn=$fn);
+
+			      translate([-a*dx,
+					 2*s_r[1],
+					 0])
+				   cylinder(h=size[2]/2,r=r,$fn=$fn);
+			 }
+	       }
+	  }
      }
 }
 
