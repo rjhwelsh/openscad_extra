@@ -31,3 +31,43 @@ function sum(a) =
 	      ]                       // return list
 	     ) :
 	undef )));
+
+// Circle functions
+
+// circle_3pt_to_xyr; converts 3 points on a circle to a center coord, and radius
+function circle_3pt_to_xyr(pt1, pt2, pt3) =
+     // Obtain x1, y1, ... etc
+     let(x1 = pt1[0],
+	 y1 = pt1[1],
+	 x2 = pt2[0],
+	 y2 = pt2[1],
+	 x3 = pt3[0],
+	 y3 = pt3[1])
+     // Obtain x1_2 (x1^2) .. etc
+     let(x1_2 = pow(x1,2),
+	 y1_2 =	pow(y1,2),
+	 x2_2 =	pow(x2,2),
+	 y2_2 =	pow(y2,2),
+	 x3_2 =	pow(x3,2),
+	 y3_2 = pow(y3,2))
+     // Equation of a circle;
+     // Ax^2 + Ay^2 + Bx + Cy + D = 0
+     // Obtain A, B, C, D coeff
+     let(A=x1*(y2-y3)-y1*(x2-x3)+x2*y3-x3*y2,
+	 B=(x1_2+y1_2)*(y3-y2)      +(x2_2+y2_2)*(y1-y3)      +(x3_2+y3_2)*(y2-y1),
+	 C=(x1_2+y1_2)*(x2-x3)      +(x2_2+y2_2)*(x3-x1)      +(x3_2+y3_2)*(x1-x2),
+	 D=(x1_2+y1_2)*(x3*y2-x2*y3)+(x2_2+y2_2)*(x1*y3-x3*y1)+(x3_2+y3_2)*(x2*y1-x1*y2))
+     // Calculate A_2 (A^2) .. etc
+     let(A_2=pow(A,2),
+	 B_2=pow(B,2),
+	 C_2=pow(C,2),
+	 D_2=pow(D,2))
+     // Calculate coords and radius
+     let(x_center=-B/(2*A),
+	 y_center=-C/(2*A),
+	 radius_2=(B_2+C_2-4*A*D)/(4*A_2),
+	 radius=sqrt(radius_2)
+	  )
+     // Return xyr
+     // Debug:: [A, B, C, D]
+     [x_center, y_center, radius];
