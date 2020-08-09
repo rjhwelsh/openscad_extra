@@ -15,12 +15,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-
-// Define standard vector directions
-// i, j, k
-i = [1,0,0];
-j = [0,1,0];
-k = [0,0,1];
+include <unit_vectors.scad>;
 
 module fillet_cube(size=[1,1,1], r=0.3, center=false) {
      // rounds cornes in xy dimension only
