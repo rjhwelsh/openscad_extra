@@ -1,7 +1,7 @@
 // Test extended shapes
 
-include <extended_shapes.scad>;
-use <extended_tests.scad>
+include <shapes.scad>;
+use <tests.scad>
 
 visual_check=true;
 
