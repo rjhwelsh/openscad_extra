@@ -1,6 +1,6 @@
-// Test extra shapes
+// Test linear array
 
-include <../shapes.scad>;
+include <../linear_array.scad>;
 //use <../test.scad> (not used yet)
 
 visual_check=true;

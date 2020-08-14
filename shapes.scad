@@ -17,43 +17,6 @@
 
 include <unit_vectors.scad>;
 
-module linear_array(
-     L=false,              // total Length between centers
-     n=3,               // number of items
-     dx=false,          // distance between centres
-     center=true,       // center array
-     v=i                // unit vector direction
-     )
-     let( v=v/norm(v)) // convert to unit vector
-{
-     msg1="Please specify a single option of \"L\" or \"dx\"!";
-     if(L) assert(!dx, msg1);
-     if(dx) assert(!L, msg1);
-
-     if (n>1) {
-	  let(
-	       dx=(L ? L/(n-1) : dx),
-	       L=(dx ? dx*(n-1) : L)
-	       )
-	       for(x=[1:n])
-		    translate(center ? -L/2*v : O) // Centre in axis
-			 translate(dx*(x-1)*v)
-			 children();
-     }
-     else if(n==1||n==-1) {
-	  children();
-     }
-     else if(n<-1) {
-	  let(n=-n) // positive the negative n
-	       let(dx=(L ? L/(n-1) : dx),
-		   L=(dx ? dx*(n-1) : L))
-	       for(x=[1:n])
-		    translate(center ? L/2*v : O) // Centre in axis
-			 translate(-dx*(x-1)*v)
-			 children();
-     }
-}
-
 module fillet_cube(size=[1,1,1], r=0.3, center=false) {
      // rounds cornes in xy dimension only
      // size = outer dimensions of cube
