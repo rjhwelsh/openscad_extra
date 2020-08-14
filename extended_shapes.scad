@@ -17,7 +17,7 @@
 
 include <unit_vectors.scad>;
 
-module array(
+module linear_array(
      L=false,              // total Length between centers
      n=3,               // number of items
      dx=false,          // distance between centres
