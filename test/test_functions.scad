@@ -1,7 +1,7 @@
 // Test extended functions
 
-use <functions.scad>
-use <tests.scad>
+use <../functions.scad>
+use <../test.scad>
 
 module test_slice() {
      // Test slice() function

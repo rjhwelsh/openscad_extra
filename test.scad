@@ -1,4 +1,4 @@
-// Openscad extended test functions and modules
+// Openscad extra test functions and modules
 // Copyright (C) 2020  rjhwelsh
 
 // This library is free software; you can redistribute it and/or
