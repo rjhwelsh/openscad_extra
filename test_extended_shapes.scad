@@ -3,7 +3,9 @@
 include <extended_shapes.scad>;
 use <extended_tests.scad>
 
-module test_linear_array(check=check) {
+visual_check=true;
+
+module test_linear_array(visual_check=visual_check) {
      // Test array() module
      dx=3;
 
@@ -84,6 +86,10 @@ module test_linear_array(check=check) {
 	  linear_array(10, dx=10, n=3, center=true)
 	  translate(j*dx*c)
 	  cube(1, center=true);
+
+
+     // Visual test comparison stl
+     if (visual_check==true) { color("black") import("test_linear_array.stl");}
 
 }
 
