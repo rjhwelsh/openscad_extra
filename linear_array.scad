@@ -18,7 +18,7 @@
 include <unit_vectors.scad>;
 
 module linear_array(
-     L=false,           // total Length between centers
+     l=false,           // total length between centers
      n=3,               // number of items
      dx=false,          // distance between centres 
      center=true,       // center array
@@ -26,17 +26,17 @@ module linear_array(
      )
      let( v=v/norm(v)) // convert to unit vector
 {
-     msg1="Please specify a single option of \"L\" or \"dx\"!";
-     if(L) assert(!dx, msg1);
-     if(dx) assert(!L, msg1);
+     msg1="Please specify a single option of \"l\" or \"dx\"!";
+     if(l) assert(!dx, msg1);
+     if(dx) assert(!l, msg1);
 
      if (n>1) {
 	  let(
-	       dx=(L ? L/(n-1) : dx),
-	       L=(dx ? dx*(n-1) : L)
+	       dx=(l ? l/(n-1) : dx),
+	       l=(dx ? dx*(n-1) : l)
 	       )
 	       for(x=[1:n])
-		    translate(center ? -L/2*v : O) // Centre in axis
+		    translate(center ? -l/2*v : O) // Centre in axis
 			 translate(dx*(x-1)*v)
 			 children();
      }
@@ -45,10 +45,10 @@ module linear_array(
      }
      else if(n<-1) {
 	  let(n=-n) // positive the negative n
-	       let(dx=(L ? L/(n-1) : dx),
-		   L=(dx ? dx*(n-1) : L))
+	       let(dx=(l ? l/(n-1) : dx),
+		   l=(dx ? dx*(n-1) : l))
 	       for(x=[1:n])
-		    translate(center ? L/2*v : O) // Centre in axis
+		    translate(center ? l/2*v : O) // Centre in axis
 			 translate(-dx*(x-1)*v)
 			 children();
      }
