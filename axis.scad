@@ -25,6 +25,9 @@ include <unit_vectors.scad>
 
 //axis_origin=[[0,0,0],[0,0,1]];
 
+// New definition, param3 is rotation around the xy plane (righthand rule)
+//axis_origin=[[0,0,0],[0,0,1],0];
+
 function angle_between_vectors(a, b) = acos(a*b/norm(a)/norm(b));
 
 // translate from origin to axis
@@ -32,8 +35,9 @@ module to_axis(axis) {
      let(t=axis[0],
 	 r=axis[1],
 	 a=angle_between_vectors(r,k),
-	 v=cross(k,r))
-	  translate(t) rotate(a=a, v=v) children();
+	 v=cross(k,r),
+	 a2=(len(axis) > 2 ? axis[2] : 0))
+	  translate(t) rotate(a=a, v=v) rotate(a=a2, v=k) children();
 }
 
 // translate from axis to origin
@@ -41,8 +45,9 @@ module from_axis(axis) {
      let(t=axis[0],
 	 r=axis[1],
 	 a=angle_between_vectors(r,k),
-	 v=cross(k,r))
-	  rotate(a=a, v=-v) translate(-t) children();
+	 v=cross(k,r),
+	 a2=(len(axis) > 2 ? axis[2] : 0))
+	  rotate(a=a2, v=-k) rotate(a=a, v=-v) translate(-t) children();
 }
 
 // transform object from axis a to axis b
