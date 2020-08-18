@@ -5,3 +5,5 @@ j = [0,1,0];
 k = [0,0,1];
 // zero vector
 O = [0,0,0];
+// ones vector
+I = [1,1,1];
